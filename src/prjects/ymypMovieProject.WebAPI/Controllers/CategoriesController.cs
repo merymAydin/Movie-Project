@@ -40,10 +40,10 @@ namespace ymypMovieProject.WebAPI.Controllers
             _categoryService.Modify(category);
             return Content("Kategori güncelleme işlemi başarılı...");
         }
-        [HttpDelete]
-        public IActionResult Delete(Category category)
+        [HttpDelete("{id}")]
+        public IActionResult Delete(Guid id)
         {
-            //var category = __categoryService.GetById(id);
+            var category = _categoryService.GetById(id);
             _categoryService.Remove(category);
             return Content("Kategori silme işlemi başarılı...");
         }
