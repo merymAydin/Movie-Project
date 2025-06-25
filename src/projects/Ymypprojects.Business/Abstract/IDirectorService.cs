@@ -12,6 +12,7 @@ namespace Ymypprojects.Business.Abstract
     {
         List<Director> GetByFirstname(string firstname);
         List<Director> GetBylastname(string lastname);
+        List<Director> GetByFullName(string firstName, string lastName);
         List<Director> GetImageUrl(string url);
     }
 }

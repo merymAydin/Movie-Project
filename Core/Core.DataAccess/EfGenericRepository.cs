@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core.DataAccess
 {
-    public abstract class EfGenericRepository<T,TContext> : IGenericRepository<T> where T : class, IEntity, new()
+    public abstract class EfGenericRepository<T, TContext> : IGenericRepository<T> where T : class, IEntity, new()
       where TContext : DbContext
     {
         // protected readonly TContext _context { get; }
@@ -28,7 +28,7 @@ namespace Core.DataAccess
 
         public void Delete(T entity)
         {
-            _dbSet.Remove(entity);
+            _dbSet.Update(entity);
             Context.SaveChanges();
         }
         public void Update(T entity)
@@ -42,12 +42,12 @@ namespace Core.DataAccess
         }
         public List<T> GetAll(Expression<Func<T, bool>> filter = null)
         {
-            return filter == null ? _dbSet.ToList(): _dbSet.Where(filter).ToList();
+            return filter == null ? _dbSet.ToList() : _dbSet.Where(filter).ToList();
         }
         public IQueryable<T> GetQueryable(Expression<Func<T, bool>>? filter = null)
         {
             return filter == null ? _dbSet : _dbSet.Where(filter);
-           // return filter == null ? _dbSet.AsQueryable() : _dbSet.Where(filter).AsQueryable();
+            // return filter == null ? _dbSet.AsQueryable() : _dbSet.Where(filter).AsQueryable();
         }
     }
 }

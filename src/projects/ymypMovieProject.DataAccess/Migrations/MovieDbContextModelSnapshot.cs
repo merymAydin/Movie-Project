@@ -114,8 +114,8 @@ namespace ymypMovieProject.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7c073b6b-af02-4e74-89ea-8f432c029679"),
-                            CreateAt = new DateTime(2025, 6, 22, 13, 20, 43, 73, DateTimeKind.Local).AddTicks(4471),
+                            Id = new Guid("1f879cb0-5711-446d-949f-e2b573e110dc"),
+                            CreateAt = new DateTime(2025, 6, 23, 17, 51, 21, 824, DateTimeKind.Local).AddTicks(2380),
                             Description = "",
                             IsActive = true,
                             IsDeleted = false,
@@ -123,8 +123,8 @@ namespace ymypMovieProject.DataAccess.Migrations
                         },
                         new
                         {
-                            Id = new Guid("cad667c2-7834-4e30-b6a7-1461dac16d9c"),
-                            CreateAt = new DateTime(2025, 6, 22, 13, 20, 43, 73, DateTimeKind.Local).AddTicks(4517),
+                            Id = new Guid("35f43169-f3f9-4be0-a403-f87e854edb5d"),
+                            CreateAt = new DateTime(2025, 6, 23, 17, 51, 21, 824, DateTimeKind.Local).AddTicks(2418),
                             Description = "",
                             IsActive = true,
                             IsDeleted = false,
@@ -132,8 +132,8 @@ namespace ymypMovieProject.DataAccess.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e50215e4-2e5f-4ef2-9bd1-6f6b61bd6f6d"),
-                            CreateAt = new DateTime(2025, 6, 22, 13, 20, 43, 73, DateTimeKind.Local).AddTicks(4521),
+                            Id = new Guid("1164bc81-b465-4414-8cb7-a24ee8a69064"),
+                            CreateAt = new DateTime(2025, 6, 23, 17, 51, 21, 824, DateTimeKind.Local).AddTicks(2440),
                             Description = "",
                             IsActive = true,
                             IsDeleted = false,
@@ -141,8 +141,8 @@ namespace ymypMovieProject.DataAccess.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e876987f-d460-441b-8666-e37de27bc38e"),
-                            CreateAt = new DateTime(2025, 6, 22, 13, 20, 43, 73, DateTimeKind.Local).AddTicks(4524),
+                            Id = new Guid("640f4792-6e0c-4236-afb9-9b4961a94faf"),
+                            CreateAt = new DateTime(2025, 6, 23, 17, 51, 21, 824, DateTimeKind.Local).AddTicks(2445),
                             Description = "",
                             IsActive = true,
                             IsDeleted = false,
@@ -150,8 +150,8 @@ namespace ymypMovieProject.DataAccess.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8175828b-3647-4899-bec0-0653c8476785"),
-                            CreateAt = new DateTime(2025, 6, 22, 13, 20, 43, 73, DateTimeKind.Local).AddTicks(4535),
+                            Id = new Guid("d69b00e0-b3b6-4038-a814-f576211f4489"),
+                            CreateAt = new DateTime(2025, 6, 23, 17, 51, 21, 824, DateTimeKind.Local).AddTicks(2449),
                             Description = "",
                             IsActive = true,
                             IsDeleted = false,
@@ -159,8 +159,8 @@ namespace ymypMovieProject.DataAccess.Migrations
                         },
                         new
                         {
-                            Id = new Guid("4ba0458e-9994-4aab-a014-5190e62a08cf"),
-                            CreateAt = new DateTime(2025, 6, 22, 13, 20, 43, 73, DateTimeKind.Local).AddTicks(4539),
+                            Id = new Guid("3d1e9642-6e68-48a7-8cea-fbcfd373ead1"),
+                            CreateAt = new DateTime(2025, 6, 23, 17, 51, 21, 824, DateTimeKind.Local).AddTicks(2453),
                             Description = "",
                             IsActive = true,
                             IsDeleted = false,

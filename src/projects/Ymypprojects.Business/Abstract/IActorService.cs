@@ -11,5 +11,6 @@ namespace Ymypprojects.Business.Abstract;
     {
         List<Actor> GetByFirstName(string firstName);
         List<Actor> GetByLastName(string lastName);
-        List<Actor> GetByFullName(string firstName, string lastName); 
+        List<Actor> GetByFullName(string firstName, string lastName);
+        List<Actor> GetAllByWithMovie();
     }

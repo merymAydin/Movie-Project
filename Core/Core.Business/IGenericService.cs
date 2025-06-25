@@ -14,5 +14,8 @@ namespace Core.Business
         void Remove (T entity);
         List<T> GetAll();
         T GetById(Guid id);
+        IQueryable<T> GetQueryable();
+        List<T> GetByIsActive();
+        List<T> GetByIsDeleted();
     }
 }

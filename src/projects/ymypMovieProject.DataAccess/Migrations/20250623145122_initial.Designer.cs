@@ -12,8 +12,8 @@ using ymypMovieProject.DataAccess.Context;
 namespace ymypMovieProject.DataAccess.Migrations
 {
     [DbContext(typeof(MovieDbContext))]
-    [Migration("20250621130154_initialCreate")]
-    partial class initialCreate
+    [Migration("20250623145122_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -93,7 +93,8 @@ namespace ymypMovieProject.DataAccess.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -103,7 +104,8 @@ namespace ymypMovieProject.DataAccess.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime2");
@@ -111,6 +113,62 @@ namespace ymypMovieProject.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("1f879cb0-5711-446d-949f-e2b573e110dc"),
+                            CreateAt = new DateTime(2025, 6, 23, 17, 51, 21, 824, DateTimeKind.Local).AddTicks(2380),
+                            Description = "",
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Aksiyon"
+                        },
+                        new
+                        {
+                            Id = new Guid("35f43169-f3f9-4be0-a403-f87e854edb5d"),
+                            CreateAt = new DateTime(2025, 6, 23, 17, 51, 21, 824, DateTimeKind.Local).AddTicks(2418),
+                            Description = "",
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Komedi"
+                        },
+                        new
+                        {
+                            Id = new Guid("1164bc81-b465-4414-8cb7-a24ee8a69064"),
+                            CreateAt = new DateTime(2025, 6, 23, 17, 51, 21, 824, DateTimeKind.Local).AddTicks(2440),
+                            Description = "",
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "bilim kurgu"
+                        },
+                        new
+                        {
+                            Id = new Guid("640f4792-6e0c-4236-afb9-9b4961a94faf"),
+                            CreateAt = new DateTime(2025, 6, 23, 17, 51, 21, 824, DateTimeKind.Local).AddTicks(2445),
+                            Description = "",
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "fantastik"
+                        },
+                        new
+                        {
+                            Id = new Guid("d69b00e0-b3b6-4038-a814-f576211f4489"),
+                            CreateAt = new DateTime(2025, 6, 23, 17, 51, 21, 824, DateTimeKind.Local).AddTicks(2449),
+                            Description = "",
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "belgesel"
+                        },
+                        new
+                        {
+                            Id = new Guid("3d1e9642-6e68-48a7-8cea-fbcfd373ead1"),
+                            CreateAt = new DateTime(2025, 6, 23, 17, 51, 21, 824, DateTimeKind.Local).AddTicks(2453),
+                            Description = "",
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "korku"
+                        });
                 });
 
             modelBuilder.Entity("ymypMovieProjectEntity.Entities.Director", b =>
@@ -161,7 +219,7 @@ namespace ymypMovieProject.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CategoriesId")
+                    b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreateAt")
@@ -174,8 +232,9 @@ namespace ymypMovieProject.DataAccess.Migrations
                     b.Property<Guid>("DirectorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("IMDB")
-                        .HasColumnType("float");
+                    b.Property<decimal>("IMDB")
+                        .HasPrecision(4, 2)
+                        .HasColumnType("decimal(4,2)");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
@@ -189,7 +248,8 @@ namespace ymypMovieProject.DataAccess.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("PublishDate")
                         .HasColumnType("datetime2");
@@ -199,7 +259,7 @@ namespace ymypMovieProject.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoriesId");
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("DirectorId");
 
@@ -223,9 +283,9 @@ namespace ymypMovieProject.DataAccess.Migrations
 
             modelBuilder.Entity("ymypMovieProjectEntity.Entities.Movie", b =>
                 {
-                    b.HasOne("ymypMovieProjectEntity.Entities.Category", "Categories")
+                    b.HasOne("ymypMovieProjectEntity.Entities.Category", "Category")
                         .WithMany("Movies")
-                        .HasForeignKey("CategoriesId")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -235,7 +295,7 @@ namespace ymypMovieProject.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Categories");
+                    b.Navigation("Category");
 
                     b.Navigation("Director");
                 });
