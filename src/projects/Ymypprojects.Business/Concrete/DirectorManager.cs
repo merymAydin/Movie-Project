@@ -80,5 +80,10 @@ namespace Ymypprojects.Business.Concrete
         {
             _directorRepository.Delete(entity);
         }
+        public List<Director> GetAllFullInfo()
+        {
+            return _directorRepository.GetQueryable()
+                .Include(d=>d.Movies).ThenInclude(m=>m.Category).ToList();
+        }
     }
 }

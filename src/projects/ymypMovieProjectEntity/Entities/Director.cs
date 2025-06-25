@@ -11,9 +11,9 @@ namespace ymypMovieProjectEntity.Entities
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string imageUrl { get; set; }
-        public DateTime BirthDate { get; set; }
-        public string Description { get; set; }
-        public  ICollection<Movie> Movies { get; set; }
+        public string? imageUrl { get; set; }
+        public DateTime? BirthDate { get; set; }
+        public string? Description { get; set; }
+        public ICollection<Movie> Movies { get; set; }
     }
 }

@@ -11,6 +11,8 @@ namespace ymypMovieProjectEntity.Entities
     {
         public Category()
         {
+            Name = string.Empty;
+            Description = string.Empty;
             Movies = new HashSet<Movie>();
         }
         public string? Name { get; set; }

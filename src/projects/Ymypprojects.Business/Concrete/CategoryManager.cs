@@ -52,10 +52,10 @@ namespace Ymypprojects.Business.Concrete
         }
         public void Remove(Category entity)
         {
-            entity.IsDeleted = true;
-            entity.IsActive = false;
-            _categoryRepository.Delete(entity);
+            var category = _categoryRepository.Get(c => c.Id.Equals(entity.Id));
+            category.IsDeleted = true;
+            category.IsActive = false;
+            _categoryRepository.Delete(category);
         }
-        
     }
 }
