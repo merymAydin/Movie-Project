@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ymypMovieProject.DataAccess.Repositories.Abstract;
+using ymypMovieProject.DataAccess.Repositories.Concrete;
 using ymypMovieProjectEntity.Entities;
 using Ymypprojects.Business.Abstract;
 
@@ -71,7 +72,7 @@ namespace Ymypprojects.Business.Concrete
             entity.IsActive = false; //deactivate move 
             _movieRepository.Delete(entity);
         }
-        public List<Movie> GetByMovieWithFullInfo(Guid actorId)
+        public List<Movie> GetByMovieWithFullInfo()
         {
             return _movieRepository.GetQueryable()
                 .Include(m=>m.Category)

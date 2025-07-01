@@ -13,7 +13,7 @@ namespace Ymypprojects.Business.Concrete
 {
     public sealed class DirectorManager : IDirectorService
     {
-        private IDirectorRepository _directorRepository;
+        private readonly IDirectorRepository _directorRepository;
 
         public DirectorManager(IDirectorRepository directorRepository)
         {
@@ -37,7 +37,8 @@ namespace Ymypprojects.Business.Concrete
 
         public Director GetById(Guid id)
         {
-            return _directorRepository.Get(d=>d.Id==id);
+            //return _directorRepository.Get(d=>d.Id==id);
+            return _directorRepository.GetQueryable(d => d.Id == id).Include(d => d.Movies).FirstOrDefault();
         }
 
         public List<Director> GetByIsActive()

@@ -20,6 +20,5 @@ namespace ymypMovieProjectEntity.Entities
         public Guid DirectorId  { get; set; }
         public Director Director { get; set; }
          public ICollection<Actor> Actors { get; set; }
-        public object CategoryName { get; set; }
     }
 }
