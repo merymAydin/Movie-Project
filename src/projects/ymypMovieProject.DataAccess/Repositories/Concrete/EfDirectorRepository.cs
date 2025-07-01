@@ -15,5 +15,6 @@ namespace ymypMovieProject.DataAccess.Repositories.Concrete
         public EfDirectorRepository(MovieDbContext context) : base(context)
         {
         }
+
     }
 }

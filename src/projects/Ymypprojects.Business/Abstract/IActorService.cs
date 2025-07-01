@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Business;
+using ymypMovieProjectEntity.Dtos.Actors;
 using ymypMovieProjectEntity.Entities;
 
 namespace Ymypprojects.Business.Abstract;
-    public interface IActorService : IGenericService<Actor>
+    public interface IActorService : IGenericService<Actor,ActorsResponseDto,ActorsAddRequestDto,ActorsUpdateRequestDto>
     {
-        List<Actor> GetByFirstName(string firstName);
-        List<Actor> GetByLastName(string lastName);
-        List<Actor> GetByFullName(string firstName, string lastName);
-        List<Actor> GetAllByWithMovie();
+     
     }

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using ymypMovieProject.DataAccess.Repositories.Abstract;
+using ymypMovieProjectEntity.Dtos.Actors;
 using ymypMovieProjectEntity.Entities;
 using Ymypprojects.Business.Abstract;
 
@@ -13,60 +15,40 @@ namespace Ymypprojects.Business.Concrete
     public sealed class ActorManager : IActorService
     {
         private readonly IActorRepository _actorRepository;
+        private readonly IMapper _mapper;
 
-        public ActorManager(IActorRepository actorRepository)
+        public ActorManager(IActorRepository actorRepository,IMapper mapper)
         {
             _actorRepository = actorRepository;
+            _mapper = mapper;
         }
 
-        public List<Actor> GetAll()
+        public ICollection<ActorsResponseDto> GetAll()
         {
-           return _actorRepository.GetAll();
-        }
-        public List<Actor> GetAllByWithMovie()
-        {
-            return _actorRepository.GetQueryable().Include(a=>a.Movies).ToList();
-        }
-        public List<Actor> GetByFirstName(string firstName)
-        {
-            return _actorRepository.GetAll(a=>a.FirstName == firstName);
-        }
-        public List<Actor> GetByFullName(string firstName, string lastName)
-        {
-            return _actorRepository.GetAll(a=> a.FirstName == firstName && a.LastName == lastName);
-        }
-        public Actor GetById(Guid id)
-        {
-            return _actorRepository.Get(a=>a.Id == id);
-        }
-        public List<Actor> GetByIsActive()
-        {
-            return _actorRepository.GetAll(a=>a.IsActive);
+            throw new NotImplementedException();
         }
 
-        public List<Actor> GetByIsDeleted()
+        public ActorsResponseDto GetById(Guid id)
         {
-            return _actorRepository.GetAll(a => a.IsDeleted);
+            throw new NotImplementedException();
         }
-        public List<Actor> GetByLastName(string lastName)
+
+        public void Insert(ActorsAddRequestDto dto)
         {
-            return _actorRepository.GetAll(a=>a.LastName == lastName);
+            var actor = _mapper.Map < Actor > (dto);
+            _actorRepository.Add(actor);
+
         }
-        public IQueryable<Actor> GetQueryable()
+
+        public void Modify(ActorsUpdateRequestDto dto)
         {
-            return _actorRepository.GetQueryable();
+            var actor = _mapper.Map< Actor > (dto);
+            _actorRepository.Update(actor);
         }
-        public void Insert(Actor entity)
+
+        public void Remove(Guid id)
         {
-            _actorRepository.Add(entity);
-        }
-        public void Modify(Actor entity)
-        {
-            _actorRepository.Update(entity);
-        }
-        public void Remove(Actor entity)
-        {
-            _actorRepository.Delete(entity);
+            throw new NotImplementedException();
         }
     }
 }

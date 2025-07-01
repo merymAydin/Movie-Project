@@ -1,55 +1,59 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ymypMovieProjectEntity.Dtos.Movies;
 using ymypMovieProjectEntity.Entities;
 using Ymypprojects.Business.Abstract;
 
 namespace ymypMovieProject.WebAPI.Controllers;
-    [Route("api/[controller]")]
-    [ApiController]
-    public class MoviesController : ControllerBase
-    {
-        private readonly IMovieService _movieService;
-        private readonly IDirectorService _directorService;
 
-    public MoviesController(IMovieService movieService)
-        {
-            _movieService = movieService;
-        }
+[Route("api/[controller]")]
+[ApiController]
+public class MoviesController : ControllerBase
+{
+    private readonly IMovieService _movieService;
+
+    public MoviesController(IMovieService movieService, IMapper mapper)
+    {
+        _movieService = movieService;
+    }
 
     [HttpGet]
-        public IActionResult GetAll()
-        {
-            var movies = _movieService.GetAll();
-            return Ok(movies);
-        }
-        [HttpGet("FullInfo")]
-        public IActionResult GetAllFullInfo()
-        {
-            var movies = _movieService.GetByMovieWithFullInfo();
-            var dto = movies.Select(m=>new
-            {
-                m.Id,
-                m.Name,
-                m.Description,
-                m.IMDB,
-                Category = new
-                {
-                    m.Category.Name
-                },
-                Director = new
-                {
-                    m.Director.FirstName,
-                    m.Director.LastName,
-                    m.Director.imageUrl
-                }
-            }).ToList();
-            return Ok(dto);
-        }
+    public IActionResult GetAll()
+    {
+        var movies = _movieService.GetAll();
+        return Ok(movies);
+    }
 
-        [HttpGet("{id}")]
-        public IActionResult GetDirector(string id)
-        {
-             Director director = _directorService.GetById(Guid.Parse(id));
-             return Ok(director);
-        }
-    }                                             
+    [HttpGet("FullInfo")]
+    public IActionResult GetAllFullInfo()
+    {
+        var movies = _movieService.GetMoviesWithFullInfo();
+        return Ok(movies);
+    }
+    [HttpGet("{id:guid}")]
+    public IActionResult GetById([FromRoute(Name = "id")] Guid id)
+    {
+        var movie = _movieService.GetById(id);
+        return Ok(movie);
+    }
+
+    [HttpPost]
+    public IActionResult Insert([FromBody] MovieAddRequestDto dto)
+    {
+        _movieService.Insert(dto);
+        return StatusCode(201, dto);
+    }
+    [HttpPut]
+    public IActionResult Update([FromBody] MovieUpdateRequestDto dto)
+    {
+        _movieService.Modify(dto);
+        return Ok(dto);
+    }
+    [HttpDelete("{id:guid}")]
+    public IActionResult Delete([FromRoute(Name = "id")] Guid id)
+    {
+        _movieService.Remove(id);
+        return Content("Movie deleted successfuly");
+    }
+}

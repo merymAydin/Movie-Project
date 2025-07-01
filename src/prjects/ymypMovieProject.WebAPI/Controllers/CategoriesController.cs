@@ -1,17 +1,21 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using ymypMovieProjectEntity.Dtos.Categories;
+using ymypMovieProjectEntity.Dtos.Directors;
 using ymypMovieProjectEntity.Entities;
 using Ymypprojects.Business.Abstract;
+using Ymypprojects.Business.Mappers.Categories;
 
 
-namespace ymypMovieProject.WebAPI.Controllers
-{
+namespace ymypMovieProject.WebAPI.Controllers;
+
     [Route("api/[controller]")]
     [ApiController]
+
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
-
         public CategoriesController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
@@ -29,13 +33,13 @@ namespace ymypMovieProject.WebAPI.Controllers
             return Ok(category);
         }
         [HttpPost]
-        public IActionResult Create(Category category)
+        public IActionResult Create(CategoryAddRequestDto category)
         {
             _categoryService.Insert(category);
             return Ok(category);
         }
         [HttpPut]
-        public IActionResult Update(Category category)
+        public IActionResult Update(CategoryUpdateRequestDto category)
         {
             _categoryService.Modify(category);
             return Content("Kategori güncelleme işlemi başarılı...");
@@ -43,15 +47,35 @@ namespace ymypMovieProject.WebAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(Guid id)
         {
-            var category = _categoryService.GetById(id);
-            _categoryService.Remove(category);
+            _categoryService.Remove(id);
             return Content("Kategori silme işlemi başarılı...");
         }
-        [HttpGet("active")]
-        public IActionResult GetActiveCategories()
-        {
-            var activeCategories = _categoryService.GetByIsActive();
-            return Ok(activeCategories);
-        }
+        //[HttpGet("active")]
+        //public IActionResult GetActiveCategories()
+        //{
+        //    return Ok();
+        //}
+        //[HttpGet("GetAllFullInfo")]
+        //public IActionResult GetAllFullInfo()
+        //{
+        //var categories = _categoryService.GetQueryable().Include(c=>c.Movies).ToList();
+        //List<CategoryResponseDto> dtos = new List<CategoryResponseDto>();
+        //foreach (var category in categories) 
+        //{
+        //    dtos.Add(new CategoryResponseDto()
+        //    {
+        //        Id = category.Id,
+        //        Name = category.Name,
+        //        Description = category.Description ?? string.Empty,
+        //    });
+        //}
+        //var x = new DirectorsResponseDto(Guid.NewGuid(), "Akın","Cengiz","asdafs",DateTime.Now,"asfgsfgdhezf");
+        //var y = new DirectorsResponseDto(Guid.NewGuid(), "Akın", "Cengiz", "asd", DateTime.Now, "asdf")
+        //{
+            
+        //};
+
+        //var dto = _mapper.ConvertToResponseList(categories);
+        //return Ok(dto);
+        //}
     }
-}

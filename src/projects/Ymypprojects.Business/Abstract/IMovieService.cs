@@ -4,17 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Business;
+using ymypMovieProjectEntity.Dtos.Movies;
 using ymypMovieProjectEntity.Entities;
 
 namespace Ymypprojects.Business.Abstract
 {
-    public interface IMovieService:IGenericService<Movie>
+    public interface IMovieService:IGenericService<Movie,MovieResponseDto,MovieAddRequestDto,MovieUpdateRequestDto>
     {
-        List<Movie> GetByName (string name);
-        List<Movie> GetByLessThanIMDB(decimal imdb);
-        List<Movie> GetByGreaterThanIMDB(decimal imdb);
-        List<Movie> GetByCategoryId(Guid categoryId);
-        List<Movie> GetByDirectorId(Guid directorId);
-        List<Movie> GetByMovieWithFullInfo();
+        List<MovieDetailDto> GetMoviesWithFullInfo();
     }
 }

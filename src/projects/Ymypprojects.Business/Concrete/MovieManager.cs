@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using ymypMovieProject.DataAccess.Repositories.Abstract;
 using ymypMovieProject.DataAccess.Repositories.Concrete;
+using ymypMovieProjectEntity.Dtos.Movies;
 using ymypMovieProjectEntity.Entities;
 using Ymypprojects.Business.Abstract;
 
@@ -14,71 +16,62 @@ namespace Ymypprojects.Business.Concrete
     public sealed class MovieManager : IMovieService
     {
         private readonly IMovieRepository _movieRepository;
-        public MovieManager(IMovieRepository movieRepository)
+        private readonly IMapper _mapper;
+        public MovieManager(IMovieRepository movieRepository, IMapper mapper)
         {
             _movieRepository = movieRepository;
+            _mapper = mapper;
         }
-        public List<Movie> GetAll()
+        public ICollection<MovieResponseDto> GetAll()
         {
-            return _movieRepository.GetAll();
+            var movies = _movieRepository.GetAll(m=> !m.IsDeleted);
+            var movieDtos = _mapper.Map<ICollection<MovieResponseDto>>(movies);
+            return movieDtos;
         }
-        public Movie GetById(Guid id)
+        public MovieResponseDto GetById(Guid id)
         {
-            return _movieRepository.Get(m=>m.Id == id);
+            var movie = _movieRepository.Get(m=>m.Id.Equals(id));
+            if (movie == null)
+            {
+                throw new KeyNotFoundException($"Movie with ID{id} not found");
+            }
+            var movieDto = _mapper.Map<MovieResponseDto>(movie);
+            return movieDto;
         }
-        public List<Movie> GetByCategoryId(Guid categoryId)
+
+        public List<MovieDetailDto> GetMoviesWithFullInfo()
         {
-            return _movieRepository.GetAll(m => m.CategoryId == categoryId).ToList();
-        }
-        public List<Movie> GetByDirectorId(Guid directorId)
-        {
-            return _movieRepository.GetAll(m => m.DirectorId == directorId).ToList();
-        }
-        public List<Movie> GetByGreaterThanIMDB(decimal imdb)
-        {
-            return _movieRepository.GetAll(m=>m.IMDB >= imdb).ToList();
-        }
-        public List<Movie> GetByIsActive()
-        {
-            return _movieRepository.GetAll(m => m.IsActive).ToList();
-        }
-        public List<Movie> GetByIsDeleted()
-        {
-            return _movieRepository.GetAll(m => m.IsDeleted);
-        }
-        public List<Movie> GetByLessThanIMDB(decimal imdb)
-        {
-            return _movieRepository.GetAll(m=>m.IMDB <= imdb).ToList();
-        }
-        public List<Movie> GetByName(string name)
-        {
-            return _movieRepository.GetAll(m=>m.Name.Equals(name)).ToList();
-        }
-        public IQueryable<Movie> GetQueryable()
-        {
-            return _movieRepository.GetQueryable();
-        }
-        public void Insert(Movie entity)
-        {
-            _movieRepository.Add(entity);
-        }
-        public void Modify(Movie entity)
-        {
-            _movieRepository.Update(entity);
-        }
-        public void Remove(Movie entity)
-        {
-            entity.IsDeleted = true; // soft delete
-            entity.IsActive = false; //deactivate move 
-            _movieRepository.Delete(entity);
-        }
-        public List<Movie> GetByMovieWithFullInfo()
-        {
-            return _movieRepository.GetQueryable()
+            var movies = _movieRepository.GetQueryable(m=> !m.IsDeleted)
                 .Include(m=>m.Category)
                 .Include(m=>m.Director)
-                .Include(m=>m.Actors)
-                .ToList();
+                .Include(m=>m.Actors).ToList();
+
+            var movieDetails = _mapper.Map<List<MovieDetailDto>>(movies);
+            return movieDetails;
+        }
+
+        public void Insert(MovieAddRequestDto dto)
+        {
+            var movie = _mapper.Map<Movie>(dto);
+            _movieRepository.Add(movie);
+        }
+        public void Modify(MovieUpdateRequestDto dto)
+        {
+            var movie = _mapper.Map<Movie>(dto);
+            _movieRepository.Update(movie);
+        }
+
+        public void Remove(Guid id)
+        {
+           var movie = _movieRepository.Get(m=>m.Id.Equals(id));
+            if (movie == null)
+            {
+                throw new KeyNotFoundException($"Movie with ID{id} not found");
+            }
+            movie.IsDeleted = true;
+            movie.IsActive = false;
+            movie.UpdateAt = DateTime.Now;
+            _movieRepository.Update(movie);
         }
     }
 }
