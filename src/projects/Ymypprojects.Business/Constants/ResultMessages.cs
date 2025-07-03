@@ -9,5 +9,6 @@ namespace Ymypprojects.Business.Constants
     public static class ResultMessages 
     {
         public static string SuccessCategoryCreated = "Gönderilen Kategori başarıyla eklendi";
+        //
     }
 }
