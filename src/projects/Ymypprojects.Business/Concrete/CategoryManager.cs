@@ -133,7 +133,8 @@ namespace Ymypprojects.Business.Concrete
                 ValidationResult result = _categoryValidator.Validate(dto);
                 if(!result.IsValid)
                 {
-                    return new ErrorResult("validation errors");
+                    string errorMessages = string.Join(",\n ",result.Errors.Select(e=>e.ErrorMessage));
+                    return new ErrorResult(errorMessages);
                 }
                 //eğer doğrulama başarılıysa, Category nesnesine dönüştürülür
                 var category = _mapper.Map<Category>(dto);
