@@ -4,12 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Core.Business.Utilities.Result;
 using Core.Entity;
+using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ymypMovieProject.DataAccess.Repositories.Abstract;
 using ymypMovieProjectEntity.Dtos.Categories;
 using ymypMovieProjectEntity.Entities;
 using Ymypprojects.Business.Abstract;
+using Ymypprojects.Business.FluentValidators;
+
 
 namespace Ymypprojects.Business.Concrete
 {
@@ -17,23 +22,16 @@ namespace Ymypprojects.Business.Concrete
     {
         private readonly ICategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
+        private readonly CategoryValidator _categoryValidator;
 
         public CategoryManager(ICategoryRepository categoryRepository, IMapper mapper)
         {
             _categoryRepository = categoryRepository;
             _mapper = mapper;
+            _categoryValidator = new CategoryValidator();
         }
 
-        public void Insert(CategoryAddRequestDto dto)
-        {
-            //Gelen dto mapper ile category nesnesine dönüştürülür.
-            Category category = _mapper.Map<Category>(dto);
-
-            //Category nesnesi veritabanına dataaccess metoduyla eklenir.
-            _categoryRepository.Add(category);
-        }
-
-
+        
         public void Modify(CategoryUpdateRequestDto dto)
         {
             //Gelen dto mapper ile category nesnesine dönüştürülür.
@@ -89,6 +87,64 @@ namespace Ymypprojects.Business.Concrete
             //kategori categoryResponseDtoya dönüştürülür
             var categoryDto = _mapper.Map<CategoryResponseDto>(category);
             return categoryDto;
+        }
+
+        public async Task InsertAsync(CategoryAddRequestDto dto)
+        {
+            try
+            {
+                if (dto == null)
+                {
+                    throw new ArgumentNullException(nameof(dto), "CategoryAddRequestDto cannot be null");
+                }
+               
+                
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+        public async Task UpdateAsync(CategoryUpdateRequestDto dto)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task RemoveAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<ICollection<CategoryResponseDto>> GetAllAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<CategoryResponseDto> GetAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IResult Insert(CategoryAddRequestDto dto)
+        {
+            try
+            {
+                ValidationResult result = _categoryValidator.Validate(dto);
+                if(!result.IsValid)
+                {
+                    return new ErrorResult("validation errors");
+                }
+                //eğer doğrulama başarılıysa, Category nesnesine dönüştürülür
+                var category = _mapper.Map<Category>(dto);
+
+                _categoryRepository.Add(category);
+                return new SuccessResult("category added succesfully");
+            }
+            catch (Exception e)
+            {
+                return new ErrorResult($"An error occurred while adding the category :{e.Message}");
+            }
         }
     }
 }

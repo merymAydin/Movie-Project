@@ -8,7 +8,8 @@ using ymypMovieProjectEntity.Dtos.Actors;
 using ymypMovieProjectEntity.Entities;
 
 namespace Ymypprojects.Business.Abstract;
-    public interface IActorService : IGenericService<Actor,ActorsResponseDto,ActorsAddRequestDto,ActorsUpdateRequestDto>
+    public interface IActorService : IGenericService<Actor,ActorsResponseDto,ActorsAddRequestDto,ActorsUpdateRequestDto>,
+    IGenericServiceAsync<Actor, ActorsResponseDto, ActorsAddRequestDto, ActorsUpdateRequestDto>
     {
      
     }

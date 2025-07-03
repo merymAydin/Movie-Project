@@ -9,7 +9,7 @@ using ymypMovieProjectEntity.Entities;
 
 namespace Ymypprojects.Business.Abstract
 {
-    public interface IMovieService:IGenericService<Movie,MovieResponseDto,MovieAddRequestDto,MovieUpdateRequestDto>
+    public interface IMovieService: IGenericService<Movie, MovieResponseDto, MovieAddRequestDto, MovieUpdateRequestDto>, IGenericServiceAsync<Movie, MovieResponseDto, MovieAddRequestDto, MovieUpdateRequestDto>
     {
         List<MovieDetailDto> GetMoviesWithFullInfo();
     }

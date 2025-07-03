@@ -17,14 +17,12 @@ public class MoviesController : ControllerBase
     {
         _movieService = movieService;
     }
-
     [HttpGet]
     public IActionResult GetAll()
     {
         var movies = _movieService.GetAll();
         return Ok(movies);
     }
-
     [HttpGet("FullInfo")]
     public IActionResult GetAllFullInfo()
     {
@@ -37,7 +35,6 @@ public class MoviesController : ControllerBase
         var movie = _movieService.GetById(id);
         return Ok(movie);
     }
-
     [HttpPost]
     public IActionResult Insert([FromBody] MovieAddRequestDto dto)
     {

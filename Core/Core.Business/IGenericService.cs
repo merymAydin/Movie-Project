@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Business.Utilities.Result;
 using Core.Entity;
 
 namespace Core.Business
@@ -13,10 +14,9 @@ namespace Core.Business
         where TCreateDto : class, ICreateDto
         where TUpdateDto : class, IUpdateDto
     {
-        void Insert(TCreateDto dto);
+        IResult Insert(TCreateDto dto);
         void Modify(TUpdateDto dto);
         void Remove (Guid id);
-
         ICollection<TResponseDto> GetAll();
         TResponseDto GetById(Guid id);
     }

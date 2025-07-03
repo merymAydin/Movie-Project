@@ -5,14 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Business;
+using Core.Business.Utilities.Result;
 using Core.Entity;
 using ymypMovieProjectEntity.Dtos.Categories;
 using ymypMovieProjectEntity.Entities;
 
 namespace Ymypprojects.Business.Abstract
 {
-    public interface ICategoryService : IGenericService<Category,CategoryResponseDto,CategoryAddRequestDto, CategoryUpdateRequestDto>
+    public interface ICategoryService : IGenericService<Category, CategoryResponseDto, CategoryAddRequestDto, CategoryUpdateRequestDto>,
+      IGenericServiceAsync<Category, CategoryResponseDto, CategoryAddRequestDto, CategoryUpdateRequestDto>
     {
-
-    }   
+        IResult Insert(CategoryAddRequestDto dto);
+    }
 }

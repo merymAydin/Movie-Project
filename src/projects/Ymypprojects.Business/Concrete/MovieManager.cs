@@ -13,7 +13,7 @@ using Ymypprojects.Business.Abstract;
 
 namespace Ymypprojects.Business.Concrete
 {
-    public sealed class MovieManager : IMovieService
+    public sealed class MovieManager //: IMovieService
     {
         private readonly IMovieRepository _movieRepository;
         private readonly IMapper _mapper;
@@ -28,6 +28,17 @@ namespace Ymypprojects.Business.Concrete
             var movieDtos = _mapper.Map<ICollection<MovieResponseDto>>(movies);
             return movieDtos;
         }
+
+        public Task<ICollection<MovieResponseDto>> GetAllAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<MovieResponseDto> GetAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
         public MovieResponseDto GetById(Guid id)
         {
             var movie = _movieRepository.Get(m=>m.Id.Equals(id));
@@ -55,12 +66,15 @@ namespace Ymypprojects.Business.Concrete
             var movie = _mapper.Map<Movie>(dto);
             _movieRepository.Add(movie);
         }
+        public Task InsertAsync(MovieAddRequestDto dto)
+        {
+            throw new NotImplementedException();
+        }
         public void Modify(MovieUpdateRequestDto dto)
         {
             var movie = _mapper.Map<Movie>(dto);
             _movieRepository.Update(movie);
         }
-
         public void Remove(Guid id)
         {
            var movie = _movieRepository.Get(m=>m.Id.Equals(id));
@@ -72,6 +86,14 @@ namespace Ymypprojects.Business.Concrete
             movie.IsActive = false;
             movie.UpdateAt = DateTime.Now;
             _movieRepository.Update(movie);
+        }
+        public Task RemoveAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+        public Task UpdateAsync(MovieUpdateRequestDto dto)
+        {
+            throw new NotImplementedException();
         }
     }
 }

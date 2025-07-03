@@ -8,7 +8,7 @@ using ymypMovieProjectEntity.Entities;
 
 namespace ymypMovieProject.DataAccess.Repositories.Abstract
 {
-    public interface IActorRepository : IGenericRepository<Actor>
+    public interface IActorRepository : IGenericRepository<Actor>,IGenericRepositoryAsync<Actor>
     {
     }
 }

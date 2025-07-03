@@ -11,7 +11,7 @@ using ymypMovieProjectEntity.Entities;
 
 namespace Ymypprojects.Business.Abstract
 {
-    public interface IDirectorService : IGenericService<Director,DirectorsResponseDto,DirectorsAddRequestDto,DirectorsUpdateRequestDto>
+    public interface IDirectorService : IGenericService<Director, DirectorsResponseDto, DirectorsAddRequestDto, DirectorsUpdateRequestDto>, IGenericServiceAsync<Director, DirectorsResponseDto, DirectorsAddRequestDto, DirectorsUpdateRequestDto>
     {
     }
 }

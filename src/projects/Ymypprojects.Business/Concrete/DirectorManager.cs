@@ -13,7 +13,7 @@ using Ymypprojects.Business.Abstract;
 
 namespace Ymypprojects.Business.Concrete
 {
-    public sealed class DirectorManager : IDirectorService
+    public sealed class DirectorManager //: IDirectorService
     {
         private readonly IDirectorRepository _directorRepository;
         private readonly IMapper _mapper;
@@ -35,6 +35,16 @@ namespace Ymypprojects.Business.Concrete
             return dtos;
         }
 
+        public Task<ICollection<DirectorsResponseDto>> GetAllAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<DirectorsResponseDto> GetAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
         public DirectorsResponseDto GetById(Guid id)
         {
             var directors = _directorRepository.Get(d=>d.Id == id);
@@ -53,6 +63,11 @@ namespace Ymypprojects.Business.Concrete
             _directorRepository.Add(director);
         }
 
+        public Task InsertAsync(DirectorsAddRequestDto dto)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Modify(DirectorsUpdateRequestDto dto)
         {
             var director = _mapper.Map<Director>(dto);
@@ -67,6 +82,15 @@ namespace Ymypprojects.Business.Concrete
             director.IsDeleted = true;
             director.UpdateAt= DateTime.Now;
             _directorRepository.Update(director);
+        }
+        public Task RemoveAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateAsync(DirectorsUpdateRequestDto dto)
+        {
+            throw new NotImplementedException();
         }
     }
 }

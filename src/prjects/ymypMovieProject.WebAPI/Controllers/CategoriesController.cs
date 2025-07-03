@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ymypMovieProjectEntity.Dtos.Categories;
@@ -35,8 +36,12 @@ namespace ymypMovieProject.WebAPI.Controllers;
         [HttpPost]
         public IActionResult Create(CategoryAddRequestDto category)
         {
-            _categoryService.Insert(category);
-            return Ok(category);
+           var result = _categoryService.Insert(category);
+           if (!result.Success)
+           {
+            return BadRequest(result.Message);
+           }
+            return Ok(result.Message);
         }
         [HttpPut]
         public IActionResult Update(CategoryUpdateRequestDto category)
