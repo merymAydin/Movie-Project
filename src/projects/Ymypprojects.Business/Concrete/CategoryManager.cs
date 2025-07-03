@@ -13,6 +13,7 @@ using ymypMovieProject.DataAccess.Repositories.Abstract;
 using ymypMovieProjectEntity.Dtos.Categories;
 using ymypMovieProjectEntity.Entities;
 using Ymypprojects.Business.Abstract;
+using Ymypprojects.Business.Constants;
 using Ymypprojects.Business.FluentValidators;
 
 
@@ -140,7 +141,7 @@ namespace Ymypprojects.Business.Concrete
                 var category = _mapper.Map<Category>(dto);
 
                 _categoryRepository.Add(category);
-                return new SuccessResult("category added succesfully");
+                return new SuccessResult(ResultMessages.SuccessCategoryCreated);
             }
             catch (Exception e)
             {
