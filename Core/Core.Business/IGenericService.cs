@@ -18,8 +18,7 @@ namespace Core.Business
         IResult Insert(TCreateDto dto);
         IResult Modify(TUpdateDto dto);
         IResult Remove (Guid id);
-        ICollection<TResponseDto> GetAll();
-        TResponseDto GetById(Guid id);
-        IResult Modify(CategoryUpdateRequestDto dto);
+        IDataResult<ICollection<TResponseDto>> GetAll();
+        IDataResult<TResponseDto> GetById(Guid id);
     }
 }

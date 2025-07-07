@@ -5,9 +5,9 @@ using ymypMovieProject.DataAccess.Repositories.Abstract;
 using ymypMovieProject.DataAccess.Repositories.Concrete;
 using Ymypprojects.Business.Abstract;
 using Ymypprojects.Business.Concrete;
-using Ymypprojects.Business.FluentValidators;
 using Ymypprojects.Business.Mappers.Categories;
 using Ymypprojects.Business.Mappers.Profiles;
+using Ymypprojects.Business.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +25,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 builder.Services.AddDbContext<MovieDbContext>();
 builder.Services.AddScoped<ICategoryService, CategoryManager>();
-//builder.Services.AddScoped<ICategoryRepository,EfCategoryRepository>();
+builder.Services.AddScoped<ICategoryRepository,EfCategoryRepository>();
 //builder.Services.AddScoped<IMovieService,MovieManager>();
 //builder.Services.AddScoped<IMovieRepository,EfMovieRepository>();
 //builder.Services.AddScoped<IDirectorService, DirectorManager>();

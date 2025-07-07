@@ -4,16 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Core.Business.Utilities.Result;
 using Microsoft.EntityFrameworkCore;
 using ymypMovieProject.DataAccess.Repositories.Abstract;
 using ymypMovieProject.DataAccess.Repositories.Concrete;
+using ymypMovieProjectEntity.Dtos.Categories;
 using ymypMovieProjectEntity.Dtos.Directors;
 using ymypMovieProjectEntity.Entities;
 using Ymypprojects.Business.Abstract;
+using Ymypprojects.Business.Constants;
 
 namespace Ymypprojects.Business.Concrete
 {
-    public sealed class DirectorManager //: IDirectorService
+    public sealed class DirectorManager : IDirectorService
     {
         private readonly IDirectorRepository _directorRepository;
         private readonly IMapper _mapper;
@@ -24,15 +27,22 @@ namespace Ymypprojects.Business.Concrete
             _mapper = mapper;
         }
 
-        public ICollection<DirectorsResponseDto> GetAll()
+        public IDataResult<ICollection<DirectorsResponseDto>> GetAll()
         {
-            var directors = _directorRepository.GetQueryable().ToList();
-            if(directors is null)
+            try
             {
-                return new List<DirectorsResponseDto>();
+                var directors = _directorRepository.GetAll(d=> !d.IsDeleted);
+                if (directors == null || !directors.Any())
+                {
+                    return new ErrorDataResult<ICollection<DirectorsResponseDto>>(ResultMessages.ErrorListed);
+                }
+                var dtos = _mapper.Map<DirectorsResponseDto>(directors);
+                return new SuccessDataResult<ICollection<DirectorsResponseDto>>(dtos, ResultMessages.SuccessListed);
             }
-            List<DirectorsResponseDto> dtos = _mapper.Map<List<DirectorsResponseDto>>(directors);
-            return dtos;
+            catch (Exception e)
+            {
+                return new ErrorDataResult<ICollection<DirectorsResponseDto>>($"An error occured while retrieving directors : {e.Message}");
+            }
         }
 
         public Task<ICollection<DirectorsResponseDto>> GetAllAsync()
@@ -45,22 +55,14 @@ namespace Ymypprojects.Business.Concrete
             throw new NotImplementedException();
         }
 
-        public DirectorsResponseDto GetById(Guid id)
+        public IDataResult<DirectorsResponseDto> GetById(Guid id)
         {
-            var directors = _directorRepository.Get(d=>d.Id == id);
-            if(directors is null)
-            {
-                throw new KeyNotFoundException("director not found");
-            }
-            DirectorsResponseDto dto = _mapper.Map<DirectorsResponseDto>(directors);
-            return dto;
+            throw new NotImplementedException();
         }
 
-        public void Insert(DirectorsAddRequestDto dto)
+        public IResult Insert(DirectorsAddRequestDto dto)
         {
-            Director director = _mapper.Map<Director>(dto);
-            director.UpdateAt = DateTime.Now;
-            _directorRepository.Add(director);
+            throw new NotImplementedException();
         }
 
         public Task InsertAsync(DirectorsAddRequestDto dto)
@@ -68,21 +70,21 @@ namespace Ymypprojects.Business.Concrete
             throw new NotImplementedException();
         }
 
-        public void Modify(DirectorsUpdateRequestDto dto)
+        public IResult Modify(DirectorsUpdateRequestDto dto)
         {
-            var director = _mapper.Map<Director>(dto);
-            director.UpdateAt = DateTime.Now;
-            _directorRepository.Update(director);
+            throw new NotImplementedException();
         }
 
-        public void Remove(Guid id)
+        public IResult Modify(CategoryUpdateRequestDto dto)
         {
-            Director director = _directorRepository.Get(d=>d.Id == id);
-            director.IsActive = false;
-            director.IsDeleted = true;
-            director.UpdateAt= DateTime.Now;
-            _directorRepository.Update(director);
+            throw new NotImplementedException();
         }
+
+        public IResult Remove(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task RemoveAsync(Guid id)
         {
             throw new NotImplementedException();
