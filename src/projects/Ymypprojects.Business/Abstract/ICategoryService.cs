@@ -15,6 +15,7 @@ namespace Ymypprojects.Business.Abstract
     public interface ICategoryService : IGenericService<Category, CategoryResponseDto, CategoryAddRequestDto, CategoryUpdateRequestDto>,
       IGenericServiceAsync<Category, CategoryResponseDto, CategoryAddRequestDto, CategoryUpdateRequestDto>
     {
-        IResult Insert(CategoryAddRequestDto dto);
+
+
     }
 }

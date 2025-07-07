@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Core.Business.Utilities.Result;
 using Core.Entity;
+using ymypMovieProjectEntity.Dtos.Categories;
 
 namespace Core.Business
 {
@@ -15,9 +16,10 @@ namespace Core.Business
         where TUpdateDto : class, IUpdateDto
     {
         IResult Insert(TCreateDto dto);
-        void Modify(TUpdateDto dto);
-        void Remove (Guid id);
+        IResult Modify(TUpdateDto dto);
+        IResult Remove (Guid id);
         ICollection<TResponseDto> GetAll();
         TResponseDto GetById(Guid id);
+        IResult Modify(CategoryUpdateRequestDto dto);
     }
 }

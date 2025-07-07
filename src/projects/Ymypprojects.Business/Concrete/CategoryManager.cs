@@ -4,17 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Core.Business;
 using Core.Business.Utilities.Result;
-using Core.Entity;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ymypMovieProject.DataAccess.Repositories.Abstract;
 using ymypMovieProjectEntity.Dtos.Categories;
 using ymypMovieProjectEntity.Entities;
 using Ymypprojects.Business.Abstract;
 using Ymypprojects.Business.Constants;
-using Ymypprojects.Business.FluentValidators;
+using Ymypprojects.Business.Validators;
 
 
 namespace Ymypprojects.Business.Concrete
@@ -24,47 +23,125 @@ namespace Ymypprojects.Business.Concrete
         private readonly ICategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
         private readonly CategoryValidator _categoryValidator;
+        private readonly CategoryUpdateValidator _updateValidator;
 
-        public CategoryManager(ICategoryRepository categoryRepository, IMapper mapper)
+        public CategoryManager(ICategoryRepository categoryRepository, IMapper mapper, CategoryUpdateValidator updateValidator)
         {
             _categoryRepository = categoryRepository;
             _mapper = mapper;
+            _updateValidator = new CategoryUpdateValidator();
             _categoryValidator = new CategoryValidator();
+            
+
+            //static metodlar nesne üzerinden değil direkt sınıf üzerinden çağrılır
         }
-
-        
-        public void Modify(CategoryUpdateRequestDto dto)
+        public IResult Insert(CategoryAddRequestDto dto)
         {
-            //Gelen dto mapper ile category nesnesine dönüştürülür.
-            Category category = _mapper.Map<Category>(dto);
-
-            //Category nesnesinin güncellenme tarihi ayarlanır.
-            category.UpdateAt = DateTime.Now; // Ensure UpdatedDate is set to current time
-
-            //Category nesnesi veritabanına dataaccess metoduyla güncellenir.
-            _categoryRepository.Update(category);
-        }
-
-        public void Remove(Guid id)
-        {
-            // ID ile kategori bulunur.
-            Category category = _categoryRepository.Get(c => c.Id.Equals(id));
-
-            // Eğer kategori bulunamazsa, KeyNotFoundException fırlatılır.
-            if (category == null)
+            try
             {
-                throw new KeyNotFoundException($"Category with ID {id} not found.");
+                ValidationResult result = _categoryValidator.Validate(dto);
+                if (!result.IsValid)
+                {
+                    string errorMessages = string.Join(",\n ", result.Errors.Select(e => e.ErrorMessage));
+                    return new ErrorResult(errorMessages);
+                }
+                //eğer doğrulama başarılıysa, Category nesnesine dönüştürülür
+                var category = _mapper.Map<Category>(dto);
+
+                _categoryRepository.Add(category);
+                return new SuccessResult(ResultMessages.SuccessCategoryCreated);
+            }
+            catch (Exception e)
+            {
+                return new ErrorResult($"An error occurred while adding the category :{e.Message}");
+            }
+        }
+        public IResult Modify(CategoryUpdateRequestDto dto)
+        {
+            try
+            {
+                ValidationResult result = _updateValidator.Validate(dto);
+                if (!result.IsValid)
+                {
+                    //eğer doğrulama başarısızsa, validationException fırlatılır.
+                    string errormessages = string.Join(",\n",result.Errors.Select(e => e.ErrorMessage));
+                    return new ErrorResult($"{ResultMessages.ErrorCategoryUpdated},\nHataListesi\n{errormessages}");
+                }
+                var category = _mapper.Map<Category>(dto);
+                category.UpdateAt=DateTime.Now;
+
+                _categoryRepository.Update(category);
+                return new SuccessResult(ResultMessages.SuccessCategoryUpdated);
+            }
+            catch (Exception e)
+            {
+                return new ErrorResult($"An error occured while updating the category{e.Message}");
+
             }
 
-            // Kategori nesnesi soft delete mantığıyla işaretlenir.
-            category.IsDeleted = true; // Soft delete logic
-            category.IsActive = false; // Optionally set IsActive to false
 
-            // Güncellenme tarihi ayarlanır.
-            category.UpdateAt = DateTime.Now; // Ensure UpdatedDate is set to current time
 
-            // Kategori nesnesi veritabanına dataaccess metoduyla güncellenir.
-            _categoryRepository.Update(category);
+
+
+
+            ////Gelen dto mapper ile category nesnesine dönüştürülür.
+            //Category category = _mapper.Map<Category>(dto);
+
+            ////Category nesnesinin güncellenme tarihi ayarlanır.
+            //category.UpdateAt = DateTime.Now; // Ensure UpdatedDate is set to current time
+
+            ////Category nesnesi veritabanına dataaccess metoduyla güncellenir.
+            //_categoryRepository.Update(category);
+        }
+
+        public IResult Remove(Guid id)
+        {
+            try
+            {
+                var category = _categoryRepository.Get(c => c.Id.Equals(id));
+                if(category is null)
+                {
+                    return new ErrorResult(ResultMessages.ErrorCategoryGetById);
+                }
+                category.IsDeleted = true;
+                category.IsActive = false;
+                category.UpdateAt = DateTime.Now;
+                _categoryRepository.Update(category);
+                return new SuccessResult(ResultMessages.SuccessCategoryDeleted);
+            }
+            catch (Exception e)
+            {
+                return new ErrorResult($"An error occured while updating the category{e.Message}");
+            }
+
+
+
+
+
+
+
+
+
+
+
+            //// ID ile kategori bulunur.
+            //Category category = _categoryRepository.Get(c => c.Id.Equals(id));
+
+            //// Eğer kategori bulunamazsa, KeyNotFoundException fırlatılır.
+            //if (category == null)
+            //{
+            //    throw new KeyNotFoundException($"Category with ID {id} not found.");
+            //}
+
+            //// Kategori nesnesi soft delete mantığıyla işaretlenir.
+            //category.IsDeleted = true; // Soft delete logic
+            //category.IsActive = false; // Optionally set IsActive to false
+
+            //// Güncellenme tarihi ayarlanır.
+            //category.UpdateAt = DateTime.Now; // Ensure UpdatedDate is set to current time
+
+            //// Kategori nesnesi veritabanına dataaccess metoduyla güncellenir.
+            //_categoryRepository.Update(category);
         }
 
         public ICollection<CategoryResponseDto> GetAll()
@@ -98,8 +175,6 @@ namespace Ymypprojects.Business.Concrete
                 {
                     throw new ArgumentNullException(nameof(dto), "CategoryAddRequestDto cannot be null");
                 }
-               
-                
             }
             catch (Exception e)
             {
@@ -127,26 +202,6 @@ namespace Ymypprojects.Business.Concrete
             throw new NotImplementedException();
         }
 
-        public IResult Insert(CategoryAddRequestDto dto)
-        {
-            try
-            {
-                ValidationResult result = _categoryValidator.Validate(dto);
-                if(!result.IsValid)
-                {
-                    string errorMessages = string.Join(",\n ",result.Errors.Select(e=>e.ErrorMessage));
-                    return new ErrorResult(errorMessages);
-                }
-                //eğer doğrulama başarılıysa, Category nesnesine dönüştürülür
-                var category = _mapper.Map<Category>(dto);
-
-                _categoryRepository.Add(category);
-                return new SuccessResult(ResultMessages.SuccessCategoryCreated);
-            }
-            catch (Exception e)
-            {
-                return new ErrorResult($"An error occurred while adding the category :{e.Message}");
-            }
-        }
+        
     }
 }

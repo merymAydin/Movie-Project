@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using FluentValidation;
 using ymypMovieProjectEntity.Dtos.Categories;
 
-namespace Ymypprojects.Business.FluentValidators;
+namespace Ymypprojects.Business.Validators;
 
 public class CategoryValidator : AbstractValidator<CategoryAddRequestDto>
 {

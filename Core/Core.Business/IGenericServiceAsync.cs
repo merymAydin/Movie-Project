@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Business.Utilities.Result;
 using Core.Entity;
+using ymypMovieProjectEntity.Dtos.Categories;
 
 namespace Core.Business
 {
@@ -17,6 +19,7 @@ namespace Core.Business
         Task UpdateAsync(TUpdateDto dto);
         Task RemoveAsync(Guid id);
         Task<ICollection<TResponseDto>> GetAllAsync();
-        Task<TResponseDto> GetAsync(Guid id);   
+        Task<TResponseDto> GetAsync(Guid id);
+        IResult Modify(CategoryUpdateRequestDto dto);
     }
 }
