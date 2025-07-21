@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ymypMovieProjectEntity.Dtos.Movies;
@@ -12,7 +13,7 @@ namespace ymypMovieProject.WebAPI.Controllers;
 public class MoviesController : ControllerBase
 {
     private readonly IMovieService _movieService;
-
+    private readonly IMapper _mapper;
     public MoviesController(IMovieService movieService, IMapper mapper)
     {
         _movieService = movieService;
@@ -20,37 +21,61 @@ public class MoviesController : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        var movies = _movieService.GetAll();
-        return Ok(movies);
+        var result = _movieService.GetAll();
+        if (!result.Success)
+        {
+            return BadRequest(result.Message);
+        }
+        return Ok(result.Data);
     }
-    [HttpGet("FullInfo")]
-    public IActionResult GetAllFullInfo()
+    [HttpGet("[action]")]
+    public IActionResult GetAllFullInfo() //ödev olarak tamamla
     {
-        var movies = _movieService.GetMoviesWithFullInfo();
-        return Ok(movies);
+        var result = _movieService.GetMoviesWithFullInfo();
+        if (!result.Success)
+        {
+            return BadRequest(result.Data);
+        }
+        return Ok(result.Data);
     }
     [HttpGet("{id:guid}")]
     public IActionResult GetById([FromRoute(Name = "id")] Guid id)
     {
-        var movie = _movieService.GetById(id);
-        return Ok(movie);
+        var result = _movieService.GetById(id);
+        if (!result.Success)
+        {
+            return BadRequest(result.Message);
+        }
+        return Ok(result.Data);
     }
     [HttpPost]
     public IActionResult Insert([FromBody] MovieAddRequestDto dto)
     {
-        _movieService.Insert(dto);
-        return StatusCode(201, dto);
+        var result = _movieService.Insert(dto);
+        if (!result.Success)
+        {
+            return BadRequest(result.Message);
+        }
+        return Ok(result.Message);
     }
     [HttpPut]
     public IActionResult Update([FromBody] MovieUpdateRequestDto dto)
     {
-        _movieService.Modify(dto);
-        return Ok(dto);
+        var result = _movieService.Modify(dto);
+        if (!result.Success)
+        {
+            return BadRequest(result.Message);
+        }
+        return Ok(result.Message);
     }
     [HttpDelete("{id:guid}")]
     public IActionResult Delete([FromRoute(Name = "id")] Guid id)
     {
-        _movieService.Remove(id);
-        return Content("Movie deleted successfuly");
+        var result = _movieService.Remove(id);
+        if (!result.Success)
+        {
+            return BadRequest(result.Message);
+        }
+        return Ok(result.Message);
     }
 }

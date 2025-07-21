@@ -17,7 +17,7 @@ namespace Core.Entity
         public BaseEntity()
         {
             Id = Guid.NewGuid();
-            CreateAt = DateTime.Now;
+            CreateAt = DateTime.UtcNow;
             UpdateAt = null;
             IsActive = true;
             IsDeleted = false;

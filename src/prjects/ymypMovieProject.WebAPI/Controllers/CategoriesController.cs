@@ -21,18 +21,29 @@ namespace ymypMovieProject.WebAPI.Controllers;
         {
             _categoryService = categoryService;
         }
-        [HttpGet]
-        public IActionResult GetAll()
+    [HttpGet]
+    public IActionResult GetAll()
+    {
+        var result = _categoryService.GetAll(false);
+        if (!result.Success)
         {
-            var result = _categoryService.GetAll();
-            if (!result.Success)
-            {
             return BadRequest(result.Message);
-            }
-            return Ok(result);
+        }
+        return Ok(result);
         //var categories = _categoryService.GetAll();
         //return Ok(categories);
     }
+        [HttpGet("[action]")]
+        public IActionResult GetAllDeleted()
+        {
+            var result = _categoryService.GetAll(true);
+            if (!result.Success)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok(result.Data);
+        }
+
         [HttpGet("{id}")]
         public IActionResult GetById(Guid id)
         {
